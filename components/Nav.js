@@ -1,6 +1,5 @@
 'use client';
 
-import React from 'react';
 import Link from 'next/link'; // This allows us to move to other pages of app
 import Image from 'next/image'; // automatically optimizes image for us
 import { useState, useEffect } from 'react';
