@@ -16,10 +16,7 @@ import { set } from 'mongoose';
 const Nav = () => {
   const isUserLoggedIn = true;
 
-  const [providers, setProviders] = useState<Record<
-    string,
-    ClientSafeProvider
-  > | null>(null);
+  const [providers, setProviders] = useState(null);
   const [toggleDropdown, setToggleDropdown] = useState(false);
 
   useEffect(() => {
