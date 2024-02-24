@@ -13,33 +13,31 @@ const handler = NextAuth({
   ],
   callbacks: {
     async session({ session }) {
-      const sessionUser = await User.findOne({
-        email: session.user.email,
-      });
-
+      // store the user id from MongoDB to session
+      const sessionUser = await User.findOne({ email: session.user.email });
       session.user.id = sessionUser._id.toString();
 
       return session;
     },
-    async signIn({ profile }) {
-      // serverless route -> lambda function that opens up only when called -> connects to database
+    async signIn({ account, profile, user, credentials }) {
       try {
         await connectToDB();
-        // check if a user already exists
+
+        // check if user already exists
         const userExists = await User.findOne({ email: profile.email });
 
-        // if not, create a new user
+        // if not, create a new document and save user in MongoDB
         if (!userExists) {
           await User.create({
             email: profile.email,
-            username: profile.email.replace(' ', '').toLowerCase(),
+            username: profile.name.replace(' ', '').toLowerCase(),
             image: profile.picture,
           });
         }
 
         return true;
       } catch (error) {
-        console.log('Error from sign in', error);
+        console.log('Error checking if user exists: ', error.message);
         return false;
       }
     },
